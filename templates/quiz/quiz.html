@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ categorie.libelle }}{% endblock %}
+{% block content %}
+
+<h1 class="text-2xl font-bold text-blue-900 mb-2">{{ categorie.libelle }}</h1>
+<p class="text-gray-500 mb-6">{{ questions|length }} question(s)</p>
+
+<form method="POST" action="{% url 'soumettre' categorie.id %}">
+  {% csrf_token %}
+
+  {% for q in questions %}
+  <div class="bg-white rounded-xl shadow p-5 mb-4">
+    <p class="font-semibold text-gray-800 mb-3">
+      {{ forloop.counter }}. {{ q.contenu.texte }}
+    </p>
+
+    <!-- Si QCM : afficher les options -->
+    {% if q.contenu.type == 'qcm' %}
+      {% for option in q.contenu.options %}
+      <label class="flex items-center gap-2 mb-2 cursor-pointer">
+        <input type="radio" name="q_{{ q.id }}" value="{{ option }}">
+        <span>{{ option }}</span>
+      </label>
+      {% endfor %}
+
+    <!-- Si Vrai/Faux -->
+    {% elif q.contenu.type == 'vrai_faux' %}
+      <label class="mr-4"><input type="radio" name="q_{{ q.id }}" value="vrai"> Vrai</label>
+      <label><input type="radio" name="q_{{ q.id }}" value="faux"> Faux</label>
+
+    <!-- Si réponse libre -->
+    {% else %}
+      <input type="text" name="q_{{ q.id }}"
+             class="border rounded w-full p-2 mt-1" placeholder="Votre réponse...">
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <button type="submit"
+          class="bg-green-600 text-white px-8 py-3 rounded-xl text-lg hover:bg-green-500">
+    Soumettre mes réponses
+  </button>
+</form>
+{% endblock %}
