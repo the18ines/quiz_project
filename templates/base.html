@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Quiz NoSQL{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="bg-blue-700 text-white px-6 py-3 flex justify-between">
+    <a href="/" class="font-bold text-xl">Quiz NoSQL</a>
+    <div class="flex gap-4 items-center">
+      {% if user.is_authenticated %}
+        <span>Bonjour, {{ user.first_name|default:user.username }}</span>
+        {% if user.is_staff %}
+          <a href="/admin/" class="bg-green-600 px-3 py-1 rounded">Admin</a>
+        {% endif %}
+        <a href="/accounts/logout/" class="bg-red-500 px-3 py-1 rounded">Déconnexion</a>
+      {% else %}
+        <a href="/accounts/login/" class="bg-blue-500 px-3 py-1 rounded">Connexion</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-4xl mx-auto p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+</body></html>
