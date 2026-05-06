@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Résultats{% endblock %}
+{% block content %}
+
+<!-- Score global -->
+<div class="bg-blue-500 text-white rounded-2xl p-6 text-center mb-6">
+  <h1 class="text-3xl font-bold">Résultats : {{ categorie.libelle }}</h1>
+  <p class="text-5xl font-extrabold mt-4 text-green-300">
+    {{ score.score }} / {{ score_max }}
+  </p>
+  <p class="mt-2 text-blue-200">sur {{ score.total_questions }} question(s)</p>
+</div>
+
+<!-- Détail question par question -->
+{% for rep in reponses %}
+<div class="bg-white rounded-xl shadow p-4 mb-3 border-l-4
+          {% if rep.est_correct %}border-green-500{% else %}border-red-400{% endif %}">
+  <p class="font-semibold">{{ rep.question.contenu.texte }}</p>
+  <p class="text-sm mt-1">
+    Votre réponse : <span class="font-mono">{{ rep.reponse_donnee.valeur }}</span>
+  </p>
+  {% if not rep.est_correct %}
+  <p class="text-sm text-green-700">
+    Bonne réponse : {{ rep.reponse_correcte.valeur }}
+  </p>
+  {% endif %}
+  <span class="text-xs font-bold
+        {% if rep.est_correct %}text-green-600{% else %}text-red-500{% endif %}">
+    {% if rep.est_correct %} +{{ rep.point_obtenu }} pt{% else %} 0 pt{% endif %}
+  </span>
+</div>
+{% endfor %}
+
+<a href="/" class="block text-center mt-6 bg-blue-700 text-white py-3 rounded-xl">
+  ← Retour aux catégories
+</a>
+{% endblock %}
